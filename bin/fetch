@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
+
+arch () {
+    local archType
+
+    archType="$(uname -m)"
+
+    case "${archType}" in
+        # armv6*)
+        #     archType="arm"
+        #     ;;
+        x86_64)
+            archType="amd64"
+            ;;
+        x86)
+            archType="386"
+            ;;
+        i686)
+            archType="386"
+            ;;
+        i386)
+            archType="386"
+            ;;
+        aarchType64)
+            archType="arm64"
+            ;;
+        armv7*)
+            archType="arm"
+            ;;
+        *)
+            return 1
+    esac
+
+    echo ${archType}
+}
+
+os () {
+    local osType
+
+    osType="$(uname)"
+
+    case "${osType}" in
+        Linux)
+            osType="linux"
+            ;;
+        Darwin)
+            osType="darwin"
+            ;;
+        FreeBSD)
+            osType="freebsd"
+            ;;
+        NetBSD)
+            osType="netbsd"
+            ;;
+        *MINGW* | *WIN32* | *CYGWIN*)
+            osType="windows"
+            ;;
+        *)
+            return 1
+    esac
+
+    echo ${osType}
+}
+
+main () {
+    local version
+    local url
+    local directory
+
+    directory="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+
+    if [[ ! -f "${directory}/fetch-binary" ]]
+    then
+        version="$(curl -0 -s -S -L "https://api.github.com/repos/gruntwork-io/fetch/releases/latest" |  grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')"
+        url="https://github.com/gruntwork-io/fetch/releases/download/${version}/fetch_$(os)_$(arch)"
+        curl -0 -s -S -L "${url}" -o "${directory}/fetch-binary"
+
+        chmod 755 "${directory}/fetch-binary"
+    fi
+
+    "${directory}/fetch-binary" "$@"
+}
+
+main "$@"
+
