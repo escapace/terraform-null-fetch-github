@@ -35,7 +35,7 @@ resource "null_resource" "fetch" {
 
 data "null_data_source" "fetch" {
   inputs = {
-    download_path = "abspath(${path.module}/downloads/${random_pet.folder.id})"
+    download_path = abspath("${path.module}/downloads/${random_pet.folder.id}")
   }
 
   depends_on = [null_resource.fetch]
