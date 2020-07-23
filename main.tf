@@ -23,13 +23,13 @@ resource "random_pet" "folder" {
 }
 
 resource "null_resource" "fetch" {
-  triggers = {
-    flags         = local.flags
-    download_path = "${path.module}/downloads/${random_pet.folder.id}"
-  }
+  # triggers = {
+  #   flags         = local.flags
+  #   download_path = "${path.module}/downloads/${random_pet.folder.id}"
+  # }
 
   provisioner "local-exec" {
-    command = "mkdir -p \"${path.module}/downloads/${random_pet.folder.id}\" && ${local.fetch} ${local.flags} \"${path.module}/downloads/${random_pet.folder.id}\""
+    command = "rm -rf \"${path.module}/downloads/${random_pet.folder.id}\" mkdir -p \"${path.module}/downloads/${random_pet.folder.id}\" && ${local.fetch} ${local.flags} \"${path.module}/downloads/${random_pet.folder.id}\""
   }
 }
 
