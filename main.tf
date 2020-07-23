@@ -29,7 +29,7 @@ resource "null_resource" "fetch" {
   # }
 
   provisioner "local-exec" {
-    command = "rm -rf \"${path.module}/downloads/${random_pet.folder.id}\" mkdir -p \"${path.module}/downloads/${random_pet.folder.id}\" && ${local.fetch} ${local.flags} \"${path.module}/downloads/${random_pet.folder.id}\""
+    command = "rm -rf \"${path.module}/downloads/${random_pet.folder.id}\" && mkdir -p \"${path.module}/downloads/${random_pet.folder.id}\" && ${local.fetch} ${local.flags} \"${path.module}/downloads/${random_pet.folder.id}\""
   }
 }
 
