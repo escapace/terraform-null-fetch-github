@@ -23,13 +23,20 @@ resource "random_pet" "folder" {
 }
 
 resource "null_resource" "fetch" {
-  # triggers = {
-  #   flags         = local.flags
-  #   download_path = "${path.module}/downloads/${random_pet.folder.id}"
-  # }
+  triggers = {
+    always_run = timestamp()
+  }
 
   provisioner "local-exec" {
-    command = "rm -rf \"${path.module}/downloads/${random_pet.folder.id}\" && mkdir -p \"${path.module}/downloads/${random_pet.folder.id}\" && ${local.fetch} ${local.flags} \"${path.module}/downloads/${random_pet.folder.id}\""
+    command = "if [ -d \"$DIRECTORY\" ]; then true; else mkdir -p \"$DIRECTORY\" && ${local.fetch} ${local.flags} \"$DIRECTORY\"; fi"
+
+    environment = {
+      DIRECTORY = "${path.module}/downloads/${random_pet.folder.id}"
+    }
+  }
+
+  lifecycle {
+    create_before_destroy = true
   }
 }
 
