@@ -1,3 +1,4 @@
+/example/.terraform.lock.hcl
 /bin/fetch-binary
 downloads/*
 !downloads/.gitkeep
