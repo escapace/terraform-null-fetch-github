@@ -1,5 +1,5 @@
 module "example" {
-  source        = "../"
+  source        = "../../"
   repo          = "https://github.com/mholt/archiver"
   tag           = "v3.2.0"
   release_asset = "arc_*"
